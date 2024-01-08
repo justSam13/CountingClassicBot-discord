@@ -208,16 +208,14 @@ async def setup(bot: DiscordBot) -> None:
                     else:
                         addedrole = f"You already have the {failrole.name} <:pog_smirk:1192487193017581648>"
 
-                await message.reply(f"{message.author.mention} RUINED IT AT **{curr_number}**!! Tf dude!\
-                              **You can't count two numbers in a row!** {addedrole}\nStart Over from **1** now.")
+                await message.reply(f"{message.author.mention} RUINED IT AT **{curr_number}**!! Tf dude! **You can't count two numbers in a row!** {addedrole}\nStart Over from **1** now.")
                 update_config(bot)
                 return
                 
             if num != next_number:
                 if next_number < 3:
                     await message.add_reaction('⚠️')
-                    await message.reply(f"Whatcha doin' dude?? <:cmon:1192487266640220230>\
-                                        Next number is **{next_number}** ")
+                    await message.reply(f"Whatcha doin' dude?? <:cmon:1192487266640220230> Next number is **{next_number}** ")
                 else:
                     curr_number = next_number - 1
                     next_number = 1
@@ -235,8 +233,7 @@ async def setup(bot: DiscordBot) -> None:
                     else:
                         addedrole = f"You already have the {failrole.name} <:pog_smirk:1192487193017581648>"
 
-                    await message.reply(f"{message.author.mention} RUINED IT AT **{curr_number}**!! Tf dude!\
-                          **Wrong number!** {addedrole}\nStart Over from **1** now.")
+                    await message.reply(f"{message.author.mention} RUINED IT AT **{curr_number}**!! Tf dude! **Wrong number!** {addedrole}\nStart Over from **1** now.")
                     update_config(bot)
                 return
             
