@@ -173,17 +173,18 @@ class General(commands.Cog, name="general"):
 
 # And then we finally add the cog to the bot so that it can load, unload, reload and use it's content.
 async def setup(bot: DiscordBot) -> None:
-    global correct_reactions, wrong_reactions, last_member_id, next_number
+    global correct_reactions, wrong_reactions, last_member_id, next_number, last_message
     await bot.add_cog(General(bot))
 
     next_number = bot.config2.get('number', 1)
     last_member_id = bot.config2.get('member', None)
+    last_message = bot.config2.get('message', None)
     correct_reactions = bot.config2.get('correct_reactions', ['✅', '☑️'])
     wrong_reactions = bot.config2.get('wrong_reactions', ['❌'])
 
     @bot.event
     async def on_message(message: discord.Message):
-        global last_member_id, next_number, correct_reactions, wrong_reactions
+        global last_member_id, next_number, correct_reactions, wrong_reactions, last_message
         if bot.counting_channel_id is None:
             return
         if message.channel.id == bot.counting_channel_id:
@@ -195,8 +196,10 @@ async def setup(bot: DiscordBot) -> None:
                 curr_number = next_number - 1
                 next_number = 1
                 last_member_id = None
+                last_message = None
                 bot.config2['number'] = 1
                 bot.config2['member'] = None
+                bot.config2['message'] = None
                 for emoji in random.choices(wrong_reactions, k=3):
                     await message.add_reaction(emoji)
 
@@ -220,8 +223,10 @@ async def setup(bot: DiscordBot) -> None:
                     curr_number = next_number - 1
                     next_number = 1
                     last_member_id = None
+                    last_message = None
                     bot.config2['member'] = None
                     bot.config2['number'] = 1
+                    bot.config2['message'] = None
                     for emoji in random.choices(wrong_reactions, k = 4):
                         await message.add_reaction(emoji)
 
@@ -239,19 +244,21 @@ async def setup(bot: DiscordBot) -> None:
             
             next_number += 1
             last_member_id = message.author.id
+            last_message = message.id
             await message.add_reaction(random.choice(correct_reactions))
             bot.config2['number'] = next_number
             bot.config2['member'] = last_member_id
+            bot.config2['message'] = message.id
             update_config(bot)
             if next_number >= bot.config2.get('pass_number', 30):
                 failrole = message.author.get_role(bot.fail_role_id)
                 if failrole:
                     await message.author.remove_roles(failrole)
                     await message.reply(f"GG {message.author.mention}, your failrole has been removed!")
-            
-        
 
-
-
-
-
+    @bot.event
+    async def on_message_delete(message: discord.Message):
+        if message.id == last_message:
+           await message.channel.send(f"Hey hey!! Whatchu doin <:cmon:1192487266640220230>\n" + \
+                                f"{message.author.mention} deleted their number!! Next Number is {next_number}\n" +\
+                                f"C'mon man don't play these cheap tricks..they won't work on me <:swag:1192487205042651166>") 
