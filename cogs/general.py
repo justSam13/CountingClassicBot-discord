@@ -202,8 +202,8 @@ async def setup(bot: DiscordBot) -> None:
 
                     failrole = message.author.get_role(bot.fail_role_id)
                     if not failrole:
-                        await message.author.add_roles(bot.fail_role_id)
-                        failrole = message.author.get_role(bot.fail_role_id)
+                        failrole = message.guild.get_role(bot.fail_role_id)
+                        await message.author.add_roles(failrole)
                         addedrole = f"You got the {failrole.name} role. Enjoy!<:holyhell:1192488575401463889>"
                     else:
                         addedrole = f"You already have the {failrole.name} <:pog_smirk:1192487193017581648>"
@@ -227,8 +227,8 @@ async def setup(bot: DiscordBot) -> None:
 
                     failrole = message.author.get_role(bot.fail_role_id)
                     if not failrole:
-                        await message.author.add_roles(bot.fail_role_id)
-                        failrole = message.author.get_role(bot.fail_role_id)
+                        failrole = message.guild.get_role(bot.fail_role_id)
+                        await message.author.add_roles(failrole)
                         addedrole = f"You got the {failrole.name} role. Enjoy!<:holyhell:1192488575401463889>"
                     else:
                         addedrole = f"You already have the {failrole.name} <:pog_smirk:1192487193017581648>"
