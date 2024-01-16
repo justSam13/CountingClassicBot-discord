@@ -2,6 +2,7 @@
 Sam's Counting Bot
 """
 
+from datetime import datetime
 import json
 import logging
 import os
@@ -65,14 +66,14 @@ class LoggingFormatter(logging.Formatter):
         formatter = logging.Formatter(format, "%Y-%m-%d %H:%M:%S", style="{")
         return formatter.format(record)
 
-logger = logging.getLogger('dcbot')
+logger = logging.getLogger('CC')
 logger.setLevel(logging.INFO)
 
 def setlogger():
     '''Setup the logger'''
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(LoggingFormatter())
-    file_handler = logging.FileHandler('dcbot.log', 'w', 'utf-8')
+    file_handler = logging.FileHandler('CC.log', 'w', 'utf-8')
     file_handler_formatter = logging.Formatter(
         "[{asctime}] [{levelname}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
     )
@@ -124,7 +125,13 @@ class DiscordBot(commands.Bot):
             activity=discord.Activity(type = discord.ActivityType.watching, name = "numbers!"),
             status=discord.Status.idle
             )
+        
+    @tasks.loop(minutes=10.0)
+    async def regular_ping(self) -> None:
+        """Latency check after 10 minutes"""
+        self.logger.info(f"{datetime.now().strftime('%B %d, %Y | %H:%M:%S')} The bot latency is {self.latency*1000}ms.")
 
+    @regular_ping.before_loop
     @status_task.before_loop
     async def before_status_task(self) -> None:
         '''Wait until the bot is ready'''
