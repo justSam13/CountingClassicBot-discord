@@ -149,6 +149,7 @@ class DiscordBot(commands.Bot):
         # await self.init_db()
         await self.load_cogs()
         self.status_task.start()
+        self.regular_ping.start()
 
         # self.database = DatabaseManager(
         #     connection=await aiosqlite.connect(main_dir + "/database/database.db")
