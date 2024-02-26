@@ -6,7 +6,7 @@ from bot import DiscordBot
 import pickle
 
 def update_config(bot : DiscordBot):
-    with open('config.pickle', 'wb') as f:
+    with open(f'{bot.main_dir}/config.pickle', 'wb') as f:
         pickle.dump(bot.config2, f)
 
 # Here we name the cog and create a new class for the cog.

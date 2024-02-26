@@ -62,29 +62,33 @@ class Owner(commands.Cog, name="owner"):
         :param context: The command context.
         :param scope: The scope of the sync. Can be `global` or `guild`.
         """
-
+        embed = discord.Embed(
+            description="unsyncing...",
+            color=0xBEBEFE,
+        )
+        sent = await context.send(embed=embed)
         if scope == "global":
-            context.bot.tree.clear_commands(guild=None)
-            await context.bot.tree.sync()
+            self.bot.tree.clear_commands(guild=None)
+            await self.bot.tree.sync()
             embed = discord.Embed(
                 description="Slash commands have been globally unsynchronized.",
                 color=0xBEBEFE,
             )
-            await context.send(embed=embed)
+            await sent.edit(embed=embed)
             return
         elif scope == "guild":
-            context.bot.tree.clear_commands(guild=context.guild)
-            await context.bot.tree.sync(guild=context.guild)
+            self.bot.tree.clear_commands(guild=context.guild)
+            await self.bot.tree.sync(guild=context.guild)
             embed = discord.Embed(
                 description="Slash commands have been unsynchronized in this guild.",
                 color=0xBEBEFE,
             )
-            await context.send(embed=embed)
+            await sent.edit(embed=embed)
             return
         embed = discord.Embed(
             description="The scope must be `global` or `guild`.", color=0xE02B2B
         )
-        await context.send(embed=embed)
+        await sent.edit(embed=embed)
 
     # @commands.hybrid_command(
     #     name="load",

@@ -27,8 +27,8 @@ else:
     with open(f"{main_dir}/config.json") as file:
         config = json.load(file)
 
-if os.path.exists('config.pickle'):
-    with open('config.pickle', 'rb') as f:
+if os.path.exists(f'{main_dir}/config.pickle'):
+    with open(f'{main_dir}/config.pickle', 'rb') as f:
         config2 = pickle.load(f)
 else:
     config2 = {}
@@ -73,7 +73,7 @@ def setlogger():
     '''Setup the logger'''
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(LoggingFormatter())
-    file_handler = logging.FileHandler('CC.log', 'w', 'utf-8')
+    file_handler = logging.FileHandler('./logs/CC.log', 'a', 'utf-8')
     file_handler_formatter = logging.Formatter(
         "[{asctime}] [{levelname}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
     )
@@ -91,6 +91,7 @@ class DiscordBot(commands.Bot):
         help_command = None
         )
         self.logger = logger
+        self.main_dir = main_dir
         self.config = config
         self.database = None
         self.config2 = config2
@@ -272,5 +273,5 @@ load_dotenv()
 if __name__=='__main__':
     setlogger()
     bot = DiscordBot()
-    synccmd(bot) # use this only when first time setting up bot. After syncing once remove this line
+    # synccmd(bot) # use this only when first time setting up bot. After syncing once remove this line
     bot.run(os.getenv("TOKEN"))
